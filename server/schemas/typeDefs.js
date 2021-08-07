@@ -22,6 +22,7 @@ const typeDefs = gql`
     name: String
     useName: String
     email: String
+    designation: String
     team: Team
   }
 
@@ -42,10 +43,17 @@ const typeDefs = gql`
       email: String!
       password: String!
       userName: String!
-      code: Int
+      designation: String!
+      code: String
     ): Auth
     login(email: String!, password: String!): Auth
     addTeam(name: String!, code: Int): Team
+    addIssue(
+      title: String!
+      description: String
+      status: String
+      assignedTo: String
+    ): Issue
   }
 `;
 module.exports = typeDefs;

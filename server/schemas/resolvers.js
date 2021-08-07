@@ -1,4 +1,7 @@
-const { AuthenticationError } = require("apollo-server-express");
+const {
+  AuthenticationError,
+  UserInputError,
+} = require("apollo-server-express");
 const { User, Issue, Team } = require("../models");
 const { signToken } = require("../utils/auth");
 
@@ -17,15 +20,27 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (parent, { name, email, password, userName, code }) => {
+    addUser: async (
+      parent,
+      { name, email, password, userName, code, designation }
+    ) => {
+      const emailUser = await User.findOne({ email });
+      console.log("I am here" + emailUser);
+      if (emailUser) {
+        console.log("I am here inside" + emailUser);
+        throw new AuthenticationError("Email Taken");
+      }
       const team = await Team.findOne({ code });
-      console.log(team);
+      if (!team) {
+        team = await Team.create({ name, code });
+      }
       const user = await User.create({
         name,
         email,
         password,
         userName,
-        code,
+        team,
+        designation,
       });
 
       const token = signToken(user);
@@ -52,8 +67,27 @@ const resolvers = {
 
     addTeam: async (__, { name, code }) => {
       const team = await Team.create({ name, code });
-
       return team;
+    },
+
+    addIssue: async (
+      __,
+      { title, description, status, assignedTo },
+      context
+    ) => {
+      console.log(context.user);
+      const author = await User.findById("610d265c1f69fe4454e2a702");
+      if (!!author) {
+        const issue = await Issue.create({
+          title,
+          description,
+          status,
+          author,
+          assignedTo,
+        });
+        return issue;
+      }
+      throw new AuthenticationError("Not logged in");
     },
   },
 };

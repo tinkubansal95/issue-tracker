@@ -1,85 +1,184 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import Auth from '../utils/auth';
-import { ADD_USER } from '../utils/mutations';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import Auth from "../utils/auth";
+import { ADD_USER } from "../utils/mutations";
+import { validateEmail } from "../utils/helpers";
 
 function Signup(props) {
-  const [formState, setFormState] = useState({ email: '', password: '' });
-  const [addUser] = useMutation(ADD_USER);
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    name: "",
+    userName: "",
+    code: "",
+    designation: "",
+  });
+  const [errMessage, setErrMessage] = useState("");
+  const [addUser, { error }] = useMutation(ADD_USER);
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    const mutationResponse = await addUser({
-      variables: {
-        email: formState.email,
-        password: formState.password,
-        firstName: formState.firstName,
-        lastName: formState.lastName,
-      },
-    });
-    const token = mutationResponse.data.addUser.token;
-    Auth.login(token);
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setFormState({
       ...formState,
       [name]: value,
     });
+    if (name === "email") {
+      !validateEmail(value)
+        ? setErrMessage("Valid Email is required!")
+        : setErrMessage("");
+      return;
+    }
   };
 
-  return (
-    <div className="container my-1">
-      <Link to="/login">← Go to Login</Link>
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-      <h2>Signup</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            placeholder="First"
-            name="firstName"
-            type="firstName"
-            id="firstName"
-            onChange={handleChange}
-          />
+    if (formState.name.trim() === "") {
+      setErrMessage("Name is required!");
+      return;
+    }
+    if (formState.email.trim() === "" || !validateEmail(formState.email)) {
+      setErrMessage("Valid Email is required!");
+      return;
+    }
+    if (formState.userName.trim() === "") {
+      setErrMessage("UserName is required!");
+      return;
+    }
+    if (formState.password.trim().length < 5) {
+      setErrMessage("Password should be atleast 5 characters long!");
+      return;
+    }
+
+    if (formState.code.trim() === "") {
+      setErrMessage("Valid Team Code is required!");
+      return;
+    }
+
+    if (formState.designation.trim() === "") {
+      setErrMessage("Designation is required!");
+      return;
+    }
+    try {
+      const mutationResponse = await addUser({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+          name: formState.name,
+          userName: formState.userName,
+          code: formState.code,
+          designation: formState.designation,
+        },
+      });
+      const token = mutationResponse.data.addUser.token;
+      Auth.login(token);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return (
+    <div class="container pt-3 contact">
+      <div class="row justify-content-center ">
+        <div class="col-md-8">
+          <h1 class="text-center">
+            <u>SignUp</u>
+          </h1>
         </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            placeholder="Last"
-            name="lastName"
-            type="lastName"
-            id="lastName"
-            onChange={handleChange}
-          />
+      </div>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-12 p-2 px-2">
+          <form onSubmit={handleFormSubmit}>
+            <div class="form-group px-5 p-3">
+              <label for="name" class="mb-2">
+                <h4>Name:</h4>
+              </label>
+              <input
+                type="text"
+                class="form-control "
+                name="name"
+                aria-describedby="nameHelp"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div class="form-group px-5 pb-3">
+              <label for="email" class="mb-2">
+                <h4>Email Address:</h4>
+              </label>
+              <input
+                type="email"
+                class="form-control "
+                name="email"
+                aria-describedby="emailHelp"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div class="form-group px-5 p-3">
+              <label for="userName" class="mb-2">
+                <h4>Username:</h4>
+              </label>
+              <input
+                type="text"
+                class="form-control "
+                name="userName"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div class="form-group px-5 p-3">
+              <label for="password" class="mb-2">
+                <h4>Password:</h4>
+              </label>
+              <input
+                type="password"
+                placeholder="******"
+                class="form-control "
+                name="password"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div class="form-group px-5 p-3">
+              <label for="team" class="mb-2">
+                <h4>Team Code:</h4>
+              </label>
+              <input
+                type="text"
+                class="form-control "
+                name="code"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div class="form-group px-5 p-3">
+              <label for="designation" class="mb-2">
+                <h4>Designation</h4>
+              </label>
+              <input
+                type="text"
+                class="form-control "
+                name="designation"
+                onChange={handleInputChange}
+              />
+              <h5 class="mt-2">{errMessage}</h5>
+              {error ? (
+                <h5 class="pt-2">This Email is already registed!</h5>
+              ) : null}
+            </div>
+            <div id="register-link" class="text-right mt-1">
+              <Link to="/Login" class="text-white">
+                Login Instead!
+              </Link>
+            </div>
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn btn-primary m-3 btn-lg"
+                id="contactButton"
+              >
+                <h5>Submit</h5>
+              </button>
+            </div>
+          </form>
         </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="email">Email:</label>
-          <input
-            placeholder="youremail@test.com"
-            name="email"
-            type="email"
-            id="email"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="pwd">Password:</label>
-          <input
-            placeholder="******"
-            name="password"
-            type="password"
-            id="pwd"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex-row flex-end">
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

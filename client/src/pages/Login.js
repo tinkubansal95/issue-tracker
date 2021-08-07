@@ -32,40 +32,63 @@ function Login(props) {
   };
 
   return (
-    <div className="container my-1">
-      <Link to="/signup">← Go to Signup</Link>
+    <div class="container pt-3 contact">
+      <div class="row justify-content-center ">
+        <div class="col-md-8">
+          <h1 class="text-center">
+            <u>Login</u>
+          </h1>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-12 p-2 px-2">
+          <form onSubmit={handleFormSubmit}>
+            <div class="form-group px-5 pb-3">
+              <label for="email" class="mb-2">
+                <h4>Email Address:</h4>
+              </label>
+              <input
+                type="email"
+                class="form-control "
+                name="email"
+                aria-describedby="emailHelp"
+                onChange={handleChange}
+              />
+            </div>
+            <div class="form-group px-5 p-3">
+              <label for="password" class="mb-2">
+                <h4>Password:</h4>
+              </label>
+              <input
+                type="password"
+                placeholder="******"
+                class="form-control "
+                name="password"
+                onChange={handleChange}
+              />
+            </div>
 
-      <h2>Login</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="email">Email address:</label>
-          <input
-            placeholder="youremail@test.com"
-            name="email"
-            type="email"
-            id="email"
-            onChange={handleChange}
-          />
+            {error ? (
+              <h5 class="pt-2 px-5">The provided credentials are incorrect</h5>
+            ) : null}
+
+            <div id="register-link" class="text-right mt-1">
+              <Link to="/signup" class="text-white">
+                SignUp Instead!
+              </Link>
+            </div>
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn btn-primary m-3 btn-lg"
+                id="contactButton"
+              >
+                <h5>Submit</h5>
+              </button>
+            </div>
+          </form>
         </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="pwd">Password:</label>
-          <input
-            placeholder="******"
-            name="password"
-            type="password"
-            id="pwd"
-            onChange={handleChange}
-          />
-        </div>
-        {error ? (
-          <div>
-            <p className="error-text">The provided credentials are incorrect</p>
-          </div>
-        ) : null}
-        <div className="flex-row flex-end">
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

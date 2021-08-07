@@ -11,6 +11,9 @@ const issueSchema = new Schema({
   description: {
     type: String,
   },
+  day: {
+    type: Date,
+  },
   status: {
     type: String,
   },

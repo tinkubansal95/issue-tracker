@@ -10,7 +10,7 @@ const teamSchema = new Schema({
     trim: true,
   },
   code: {
-    type: Number,
+    type: String,
     unique: true,
   },
   issues: [Issue.schema],

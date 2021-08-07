@@ -24,6 +24,10 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
+  designation: {
+    type: String,
+    required: true,
+  },
   team: {
     type: Schema.Types.ObjectId,
     ref: "Team",
