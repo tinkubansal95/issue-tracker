@@ -60,6 +60,13 @@ p {
   text-align: justify;
 }
 
+#addIssue {
+  background-color: #0d63d4;
+}
+
+#signUp {
+  background-color: rgb(201, 151, 12);
+}
 .contact {
   border-style: solid;
   margin-top: 30px;

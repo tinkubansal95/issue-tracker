@@ -7,6 +7,15 @@ const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
+    users: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        const users = await User.find({ team: user.team });
+        return users;
+      }
+
+      throw new AuthenticationError("Not logged in");
+    },
     issues: async () => {
       return await Issue.find();
     },
@@ -25,9 +34,7 @@ const resolvers = {
       { name, email, password, userName, code, designation }
     ) => {
       const emailUser = await User.findOne({ email });
-      console.log("I am here" + emailUser);
       if (emailUser) {
-        console.log("I am here inside" + emailUser);
         throw new AuthenticationError("Email Taken");
       }
       const team = await Team.findOne({ code });
@@ -75,15 +82,19 @@ const resolvers = {
       { title, description, status, assignedTo },
       context
     ) => {
-      console.log(context.user);
-      const author = await User.findById("610d265c1f69fe4454e2a702");
+      const author = await User.findById(context.user._id);
+      let assigned;
+      assignedTo === "you"
+        ? (assigned = context.user._id)
+        : (assigned = assignedTo);
       if (!!author) {
         const issue = await Issue.create({
           title,
           description,
           status,
           author,
-          assignedTo,
+          day: new Date(),
+          assignedTo: assigned,
         });
         return issue;
       }

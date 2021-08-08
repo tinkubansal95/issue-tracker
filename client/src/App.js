@@ -13,6 +13,7 @@ import NoMatch from "./pages/NoMatch";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navtabs from "./components/Navtabs";
+import AddIssue from "./pages/AddIssue";
 import { StoreProvider } from "./utils/GlobalState";
 
 const httpLink = createHttpLink({
@@ -45,6 +46,7 @@ function App() {
               <Route exact path="/" component={Dashboard} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
+              <Route exact path="/addIssue" component={AddIssue} />
               <Route component={NoMatch} />
             </Switch>
           </StoreProvider>

@@ -78,7 +78,7 @@ function Signup(props) {
     }
   };
   return (
-    <div class="container pt-3 contact">
+    <div class="container pt-3 contact" id="signUp">
       <div class="row justify-content-center ">
         <div class="col-md-8">
           <h1 class="text-center">

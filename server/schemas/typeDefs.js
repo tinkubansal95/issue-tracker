@@ -33,6 +33,7 @@ const typeDefs = gql`
 
   type Query {
     issues: [Issue]
+    users: [User]
     user: User
     team: Team
   }
