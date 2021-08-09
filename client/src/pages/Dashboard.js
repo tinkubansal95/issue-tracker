@@ -10,6 +10,13 @@ import moment from "moment";
 const Dashboard = () => {
   const [status, setStatus] = useState("All");
   const { data } = useQuery(QUERY_TEAMS);
+  if (!Auth.loggedIn()) {
+    return (
+      <div class="d-flex justify-content-center headingDashboard">
+        <h2>You need to login first!</h2>
+      </div>
+    );
+  }
   let team;
   let issues;
   if (data) {
@@ -21,33 +28,37 @@ const Dashboard = () => {
     if (name === "btnradio") {
       setStatus(value);
     }
-    console.log(
-      moment.parseZone("2021-08-08T22:08:01.531+00:00").format("D/MM/YYYY")
-    );
   }
   function renderComponent(issue) {
     if (issue.status === status || status === "All") {
       return (
-        <div class="p-2" key={issue._id}>
-          <a href="{{link}}" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-              <h4 class="mb-1 title">{issue.title}</h4>
-              <small class="text-muted">
-                <span class="badge badge-info author">
-                  Lodged by {issue.author.name}
-                </span>
-                <span class="badge badge-info status">
-                  Status {issue.status}
-                </span>
-                <span class="badge badge-info lodgedDate">
-                  Lodged on{" "}
-                  {moment.parseZone(parseInt(issue.day)).format("D/MM/YYYY")}
-                </span>
-                <span class="badge badge-info assignedTo">
-                  Assigned to {issue.assignedTo.name}
-                </span>
-              </small>
+        <div class="p-2  issues" key={issue._id}>
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between row">
+              <div class="col-lg-5">
+                <h4 class="mb-1 title">{issue.title}</h4>
+              </div>
+              <div class="col-lg-7 d-flex flex-row-reverse issueDetails">
+                <small class="text-muted">
+                  <span class="badge badge-info author">
+                    Lodged by {issue.author.name}
+                  </span>
+                  <span class="badge badge-info status">
+                    Status {issue.status}
+                  </span>
+
+                  <span class="badge badge-info lodgedDate">
+                    Lodged on{" "}
+                    {moment.parseZone(parseInt(issue.day)).format("D/MM/YYYY")}
+                  </span>
+
+                  <span class="badge badge-info assignedTo">
+                    Assigned to {issue.assignedTo.name}
+                  </span>
+                </small>
+              </div>
             </div>
+
             <p class="mb-1 description">{issue.description}</p>
           </a>
         </div>
