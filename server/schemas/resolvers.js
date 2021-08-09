@@ -16,8 +16,12 @@ const resolvers = {
 
       throw new AuthenticationError("Not logged in");
     },
-    issues: async () => {
-      return await Issue.find();
+    team: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        const team = await Team.findById(user.team);
+        return team;
+      }
     },
     user: async (parent, args, context) => {
       if (context.user) {
@@ -26,6 +30,20 @@ const resolvers = {
       }
 
       throw new AuthenticationError("Not logged in");
+    },
+  },
+  Team: {
+    async issues(parent, args, ctx, info) {
+      const { issues: ids } = parent;
+      return await Issue.find({ _id: { $in: ids } });
+    },
+  },
+  Issue: {
+    async assignedTo(parent, args, ctx, info) {
+      return await User.findOne({ _id: parent.assignedTo });
+    },
+    async author(parent, args, ctx, info) {
+      return await User.findOne({ _id: parent.author });
     },
   },
   Mutation: {
@@ -96,6 +114,7 @@ const resolvers = {
           day: new Date(),
           assignedTo: assigned,
         });
+        await Team.findByIdAndUpdate(author.team, { $push: { issues: issue } });
         return issue;
       }
       throw new AuthenticationError("Not logged in");

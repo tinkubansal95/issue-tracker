@@ -8,12 +8,13 @@ const typeDefs = gql`
     status: String
     assignedTo: User
     author: User
+    day: String
   }
 
   type Team {
     _id: ID
     name: String
-    code: Int
+    code: String
     issues: [Issue]
   }
 
@@ -48,7 +49,7 @@ const typeDefs = gql`
       code: String
     ): Auth
     login(email: String!, password: String!): Auth
-    addTeam(name: String!, code: Int): Team
+    addTeam(name: String!, code: String): Team
     addIssue(
       title: String!
       description: String

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_ISSUE } from "../utils/mutations";
 import { useQuery } from "@apollo/client";
-import { QUERY_USERS } from "../utils/queries";
+import { QUERY_USERS, QUERY_ISSUES } from "../utils/queries";
 
 function AddIssue(props) {
   const { data } = useQuery(QUERY_USERS);
@@ -12,6 +12,7 @@ function AddIssue(props) {
   if (data) {
     users = data.users;
   }
+
   const [formState, setFormState] = useState({
     title: "",
     description: "",
@@ -28,7 +29,6 @@ function AddIssue(props) {
       ...formState,
       [name]: value,
     });
-    console.log(users);
   };
 
   const handleFormSubmit = async (event) => {
@@ -101,7 +101,7 @@ function AddIssue(props) {
                 <option defaultValue value="New">
                   New
                 </option>
-                <option value="In Process">In Process</option>
+                <option value="In Progress">In Progress</option>
                 <option value="Resolved">Resolved</option>
               </select>
             </div>

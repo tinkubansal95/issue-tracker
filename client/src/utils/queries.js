@@ -8,3 +8,28 @@ export const QUERY_USERS = gql`
     }
   }
 `;
+
+export const QUERY_TEAMS = gql`
+  {
+    team {
+      _id
+      name
+      code
+      issues {
+        _id
+        title
+        description
+        status
+        assignedTo {
+          _id
+          name
+        }
+        author {
+          _id
+          name
+        }
+        day
+      }
+    }
+  }
+`;

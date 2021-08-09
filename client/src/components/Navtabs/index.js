@@ -37,7 +37,7 @@ function Navtabs() {
           </span>
         </Link>
       </h1>
-      <nav class="nav nav-pills nav-justified">
+      <nav className="nav nav-pills nav-justified">
         <ul className="nav nav-pills">
           <li className="nav-item ">
             <NavLink to="/" activeClassName="active">
@@ -45,8 +45,8 @@ function Navtabs() {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/repos" activeClassName="active">
-              Repos
+            <NavLink to="/addIssue" activeClassName="active">
+              LodgeIssue
             </NavLink>
           </li>
           {showNavigation()}
