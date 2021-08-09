@@ -47,6 +47,17 @@ const resolvers = {
     },
   },
   Mutation: {
+    updateStatus: async (_, { _id, status }) => {
+      return await Issue.findByIdAndUpdate(_id, { status }, { new: true });
+    },
+    updateAssignedTo: async (_, { _id, assignedTo }) => {
+      const user = await User.findOne({ _id: assignedTo });
+      return await Issue.findByIdAndUpdate(
+        _id,
+        { assignedTo: user },
+        { new: true }
+      );
+    },
     addUser: async (
       parent,
       { name, email, password, userName, code, designation }

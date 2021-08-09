@@ -54,3 +54,19 @@ export const ADD_ISSUE = gql`
     }
   }
 `;
+
+export const UPDATE_STATUS = gql`
+  mutation updateStatus($_id: ID!, $status: String!) {
+    updateStatus(_id: $_id, status: $status) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_ASSIGNEDTO = gql`
+  mutation updateAssignedTo($_id: ID!, $assignedTo: String!) {
+    updateAssignedTo(_id: $_id, assignedTo: $assignedTo) {
+      _id
+    }
+  }
+`;

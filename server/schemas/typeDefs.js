@@ -40,6 +40,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    updateStatus(_id: ID!, status: String!): Issue
+    updateAssignedTo(_id: ID!, assignedTo: String!): Issue
     addUser(
       name: String!
       email: String!
