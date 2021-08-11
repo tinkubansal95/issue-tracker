@@ -8,102 +8,148 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     users: async (parent, args, context) => {
-      if (context.user) {
-        const user = await User.findById(context.user._id);
-        const users = await User.find({ team: user.team });
-        return users;
+      try{
+        if (context.user) {
+          const user = await User.findById(context.user._id);
+          const users = await User.find({ team: user.team });
+          return users;
+        }
+  
+        throw new AuthenticationError("Not logged in");
       }
-
-      throw new AuthenticationError("Not logged in");
+      catch(err){
+        console.log(err)
+      }
     },
     team: async (parent, args, context) => {
-      if (context.user) {
-        const user = await User.findById(context.user._id);
-        const team = await Team.findById(user.team);
-        return team;
+      try{
+        if (context.user) {
+          const user = await User.findById(context.user._id);
+          const team = await Team.findById(user.team);
+          return team;
+        }
+      }
+      catch(err){
+        console.log(err);
       }
     },
     user: async (parent, args, context) => {
-      if (context.user) {
-        const user = await User.findById(context.user._id).populate("team");
-        return user;
+      try{
+        if (context.user) {
+          const user = await User.findById(context.user._id).populate("team");
+          return user;
+        }
+  
+        throw new AuthenticationError("Not logged in");
       }
-
-      throw new AuthenticationError("Not logged in");
-    },
+      catch(err){
+        console.log(err)
+      }
   },
   Team: {
     async issues(parent, args, ctx, info) {
-      const { issues: ids } = parent;
-      return await Issue.find({ _id: { $in: ids } });
+      try {
+        const { issues: ids } = parent;
+        return await Issue.find({ _id: { $in: ids } });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   Issue: {
     async assignedTo(parent, args, ctx, info) {
-      return await User.findOne({ _id: parent.assignedTo });
+      try {
+        return await User.findOne({ _id: parent.assignedTo });
+      } catch (err) {
+        console.log(err);
+      }
     },
     async author(parent, args, ctx, info) {
-      return await User.findOne({ _id: parent.author });
+      try {
+        return await User.findOne({ _id: parent.author });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   Mutation: {
     updateStatus: async (_, { _id, status }) => {
-      return await Issue.findByIdAndUpdate(_id, { status }, { new: true });
+      try {
+        return await Issue.findByIdAndUpdate(_id, { status }, { new: true });
+      } catch (err) {
+        console.log(err);
+      }
     },
     updateAssignedTo: async (_, { _id, assignedTo }) => {
-      const user = await User.findOne({ _id: assignedTo });
-      return await Issue.findByIdAndUpdate(
-        _id,
-        { assignedTo: user },
-        { new: true }
-      );
+      try {
+        const user = await User.findOne({ _id: assignedTo });
+        return await Issue.findByIdAndUpdate(
+          _id,
+          { assignedTo: user },
+          { new: true }
+        );
+      } catch (err) {
+        console.log(err);
+      }
     },
     addUser: async (
       parent,
       { name, email, password, userName, code, designation }
     ) => {
-      const emailUser = await User.findOne({ email });
-      if (emailUser) {
-        throw new AuthenticationError("Email Taken");
-      }
-      const team = await Team.findOne({ code });
-      if (!team) {
-        team = await Team.create({ name, code });
-      }
-      const user = await User.create({
-        name,
-        email,
-        password,
-        userName,
-        team,
-        designation,
-      });
+      try {
+        const emailUser = await User.findOne({ email });
+        if (emailUser) {
+          throw new AuthenticationError("Email Taken");
+        }
+        const team = await Team.findOne({ code });
+        if (!team) {
+          team = await Team.create({ name, code });
+        }
+        const user = await User.create({
+          name,
+          email,
+          password,
+          userName,
+          team,
+          designation,
+        });
 
-      const token = signToken(user);
-      return { token, user };
+        const token = signToken(user);
+        return { token, user };
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
+      try {
+        const user = await User.findOne({ email });
 
-      if (!user) {
-        throw new AuthenticationError("Incorrect credentials");
+        if (!user) {
+          throw new AuthenticationError("Incorrect credentials");
+        }
+
+        const correctPw = await user.isCorrectPassword(password);
+
+        if (!correctPw) {
+          throw new AuthenticationError("Incorrect credentials");
+        }
+
+        const token = signToken(user);
+
+        return { token, user };
+      } catch (err) {
+        console.log(err);
       }
-
-      const correctPw = await user.isCorrectPassword(password);
-
-      if (!correctPw) {
-        throw new AuthenticationError("Incorrect credentials");
-      }
-
-      const token = signToken(user);
-
-      return { token, user };
     },
 
     addTeam: async (__, { name, code }) => {
-      const team = await Team.create({ name, code });
-      return team;
+      try {
+        const team = await Team.create({ name, code });
+        return team;
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     addIssue: async (
@@ -111,24 +157,30 @@ const resolvers = {
       { title, description, status, assignedTo },
       context
     ) => {
-      const author = await User.findById(context.user._id);
-      let assigned;
-      assignedTo === "you"
-        ? (assigned = context.user._id)
-        : (assigned = assignedTo);
-      if (!!author) {
-        const issue = await Issue.create({
-          title,
-          description,
-          status,
-          author,
-          day: new Date(),
-          assignedTo: assigned,
-        });
-        await Team.findByIdAndUpdate(author.team, { $push: { issues: issue } });
-        return issue;
+      try {
+        const author = await User.findById(context.user._id);
+        let assigned;
+        assignedTo === "you"
+          ? (assigned = context.user._id)
+          : (assigned = assignedTo);
+        if (!!author) {
+          const issue = await Issue.create({
+            title,
+            description,
+            status,
+            author,
+            day: new Date(),
+            assignedTo: assigned,
+          });
+          await Team.findByIdAndUpdate(author.team, {
+            $push: { issues: issue },
+          });
+          return issue;
+        }
+        throw new AuthenticationError("Not logged in");
+      } catch (err) {
+        console.log(err);
       }
-      throw new AuthenticationError("Not logged in");
     },
   },
 };
