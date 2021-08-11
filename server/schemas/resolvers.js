@@ -8,43 +8,41 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     users: async (parent, args, context) => {
-      try{
+      try {
         if (context.user) {
           const user = await User.findById(context.user._id);
           const users = await User.find({ team: user.team });
           return users;
         }
-  
+
         throw new AuthenticationError("Not logged in");
-      }
-      catch(err){
-        console.log(err)
+      } catch (err) {
+        console.log(err);
       }
     },
     team: async (parent, args, context) => {
-      try{
+      try {
         if (context.user) {
           const user = await User.findById(context.user._id);
           const team = await Team.findById(user.team);
           return team;
         }
-      }
-      catch(err){
+      } catch (err) {
         console.log(err);
       }
     },
     user: async (parent, args, context) => {
-      try{
+      try {
         if (context.user) {
           const user = await User.findById(context.user._id).populate("team");
           return user;
         }
-  
+
         throw new AuthenticationError("Not logged in");
+      } catch (err) {
+        console.log(err);
       }
-      catch(err){
-        console.log(err)
-      }
+    },
   },
   Team: {
     async issues(parent, args, ctx, info) {
