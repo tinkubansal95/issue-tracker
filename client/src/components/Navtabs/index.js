@@ -31,7 +31,7 @@ function Navtabs() {
   return (
     <header>
       <h1>
-        <Link to="/">
+        <Link to="/dashboard">
           <span role="img" aria-label="shopping bag">
             <img src={logo} alt="Issue Tracker" />
           </span>
@@ -40,7 +40,7 @@ function Navtabs() {
       <nav className="nav nav-pills nav-justified">
         <ul className="nav nav-pills">
           <li className="nav-item ">
-            <NavLink to="/" activeClassName="active">
+            <NavLink to="/dashboard" activeClassName="active">
               Dashboard
             </NavLink>
           </li>

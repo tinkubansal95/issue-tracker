@@ -49,6 +49,11 @@ const Dashboard = () => {
     team = data.team;
     issues = team.issues;
   }
+  function getColor(status) {
+    if (status === "New") return "#ffcccc";
+    if (status === "In Progress") return "#a0e7e5";
+    else return "#b4f8c8";
+  }
   function handleInputChange(event) {
     const { name, value } = event.target;
     if (name === "btnradio") {
@@ -68,7 +73,7 @@ const Dashboard = () => {
         status: statusNew,
       },
     });
-    window.location.assign("/");
+    window.location.assign("/dashboard");
   }
   async function updateAssignedToUser() {
     const mutationResponse = await updateAssignedTo({
@@ -77,19 +82,23 @@ const Dashboard = () => {
         assignedTo: assignedToNew,
       },
     });
-    window.location.assign("/");
+    window.location.assign("/dashboard");
   }
   function renderComponent(issue) {
     //setCurrentID(issue._id);
     if (issue.status === status || status === "All") {
       return (
         <div class="p-2  issues" key={issue._id}>
-          <a href="#" class="list-group-item list-group-item-action">
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            style={{ backgroundColor: getColor(issue.status) }}
+          >
             <div class="d-flex w-100 justify-content-between row">
-              <div class="col-lg-5">
+              <div class="col-lg-4">
                 <h4 class="mb-1 title">{issue.title}</h4>
               </div>
-              <div class="col-lg-7 d-flex flex-row-reverse issueDetails">
+              <div class="col-lg-8 d-flex flex-row-reverse issueDetails">
                 <small class="text-muted">
                   <span class="badge badge-info author">
                     Lodged by {issue.author.name}
@@ -199,7 +208,16 @@ const Dashboard = () => {
   }
 
   return (
-    <div class="container" id="basicContainer">
+    <div class="container pt-3" id="basicContainer">
+      <div class="text-center pb-2 shopName">
+        {team ? (
+          <h3>
+            {team.name} ({team.code})
+          </h3>
+        ) : (
+          <h1>Your Team</h1>
+        )}
+      </div>
       <div class="text-center dashboardToggle">
         <div
           class="btn-group"

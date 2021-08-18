@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Alegreya:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
 :root {
   /* declare a variable with `--` syntax */
@@ -10,26 +10,33 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.3;
-  font-family: "Alegreya", serif;
+  font-family: "Varela Round", sans-serif;
+}
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1%;
-
+  background-color: #191a64;
+  color: white;
   margin: 0;
   font-size: 150%;
 }
-.active {
-  color: #1cbb9b;
-}
+
 a {
-  color: black;
+  color: white;
   text-decoration: none;
   font-weight: bold;
   margin-left: 45px;
   font-size: 150%;
+}
+a.active {
+  color: grey;
 }
 .headingDashboard {
   padding-top: 150px;
@@ -44,6 +51,10 @@ header h2 {
   font-weight: bold;
   font-size: 110%;
   margin-right: 20px;
+  color: white;
+}
+.nav-link.active {
+  color: black;
 }
 
 nav li {
@@ -60,6 +71,10 @@ main {
   color: rgb(206, 25, 70);
   border-color: rgb(206, 25, 70);
 }
+.shopName {
+  color: #191a64;
+  font-size: 70%;
+}
 .btn-check:active + .btn-outline-success,
 .btn-check:checked + .btn-outline-success,
 .btn-outline-success.active,
@@ -71,37 +86,42 @@ main {
 }
 .description {
   font-weight: 100;
+  font-size: 80%;
 }
 .dashboardButton:hover {
   background-color: rgb(206, 25, 70);
 }
 .issue {
-  font-size: 150%;
+  font-size: 100%;
 }
 .author {
-  background-color: rebeccapurple;
-  font-weight: 100;
+  background-color: rgb(206, 25, 70);
+  font-weight: 80;
+  font-size: 65%;
 }
 
 .title {
   font-weight: bold;
-  font-size: 120%;
+  font-size: 100%;
   padding: 5px;
 }
 .assignedTo {
-  background-color: #a72470;
-  font-weight: 100;
+  background-color: rgb(206, 25, 70);
+  font-weight: 80;
   margin-left: 15px;
+  font-size: 65%;
 }
 .status {
-  background-color: #990303;
-  font-weight: 100;
+  background-color: #191a64;
+  font-weight: 80;
   margin-left: 15px;
+  font-size: 65%;
 }
 .lodgedDate {
-  background-color: #0b7522;
-  font-weight: 100;
+  background-color: #191a64;
+  font-weight: 80;
   margin-left: 15px;
+  font-size: 65%;
 }
 p {
   text-align: justify;

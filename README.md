@@ -2,9 +2,9 @@
 
 ![Licence](https://img.shields.io/badge/Licence-MIT-green.png)
 
-## Goals of the project :
+## About The Project :
 
-`To build a website, where users should be able to track issues of their organisation. User can build their own team, report issues, assign those issues to their team member, Update status of issue as New, In Progress and Resolved, re assign those issues to someone else. User is able to view all the issues of their team, on basis of their status.`
+`Issue Tracker is a MERN stack application where users can track issues of their organization. Users can build their own team, report issues, assign those issues to their team members, update the status of issues as New, In-Progress and Resolved, re-assign those issues to someone else. Users can view the issues of their team, on the basis of the issue's status.`
 
 ## Table of Contents
 
@@ -27,7 +27,7 @@ This application has the following features:
 - Once loggedIn, User is redirected to dashboard.
 - User can add a new Issue, which includes title and description of issue, status of the issue and can assign it to someone in his team.
 - On Dashboard, user can view Issue according to status of the issues.
-- User can also reassign thoose issues and can change the status of issue.
+- User can also reassign those issues and can change the status of issue.
 
 ## Technologies Used:
 
